@@ -5,7 +5,6 @@ import EditEventPage from "./pages/EditEvent";
 import EventDetailPage from "./pages/EventDetail";
 import NewEventPage from "./pages/NewEvent";
 import RootLayout from "./pages/Root";
-
 import EventRootLayout from "./pages/EventRoot";
 // Challenge / Exercise
 
@@ -41,7 +40,17 @@ const router = createBrowserRouter([
         path: "events",
         element: <EventRootLayout />,
         children: [
-          { index: true, element: <EventsPage /> },
+          { index: true, element: <EventsPage />,loader: async ()=>{
+            const response = await fetch('http://localhost:8080/events');
+
+      if (!response.ok) {
+        
+      } else {
+        const resData = await response.json();
+       return resData.events;
+      }
+          }
+           },
           { path: ":id", element: <EventDetailPage /> },
           { path: "new", element: <NewEventPage /> },
           { path: ":id/edit", element: <EditEventPage /> },
